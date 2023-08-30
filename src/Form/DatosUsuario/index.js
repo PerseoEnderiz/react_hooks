@@ -46,7 +46,7 @@ import React, { useState } from "react";
 import { TextField, Button, Box } from "@mui/material";
 import { validateEmail, validatePassword } from "./validaciones.js";
 
-function DatosUsuario() {
+function DatosUsuario({cambiaFormulario }) {
   const [email, setEmail] = useState({ value: "", isValid: true });
   const [password, setPassword] = useState({ value: "", isValid: true });
 
@@ -63,11 +63,18 @@ function DatosUsuario() {
       isValid: validatePassword(event.target.value),
     });
   };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (email.isValid && password.isValid) {
+      cambiaFormulario(1);
+    }
+  };
 
   return (
     <Box
       component="form"
       autocomplete="off"
+      onSubmit={handleSubmit}
       sx={{
         display: "flex",
         alignItems: "center",
@@ -85,6 +92,7 @@ function DatosUsuario() {
         helperText={!email.isValid && "Ingresa un correo electrónico válido"}
         value={email.value}
         onChange={handleEmailChange}
+        required
       />
       <TextField
         label="Contraseña"
@@ -96,6 +104,7 @@ function DatosUsuario() {
         helperText={!password.isValid && "La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula, una letra minúscula y un número"}
         value={password.value}
         onChange={handlePasswordChange}
+        required
       />
       <Button variant="contained" type="submit">
         Siguiente
